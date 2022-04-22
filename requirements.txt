@@ -1,0 +1,4 @@
+vosk
+argostranslate
+sounddevice
+git+https://github.com/nateshmbhat/pyttsx3@5d3755b#egg=pyttsx3
