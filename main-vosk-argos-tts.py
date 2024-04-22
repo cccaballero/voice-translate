@@ -8,9 +8,15 @@ import sounddevice as sd
 import vosk
 import sys
 
-from argostranslate import package, translate
+from argostranslate import package
+from argostranslate.translate import translate
 
-import pyttsx3
+from TTS.api import TTS
+import playsound
+
+
+from_code = "es"
+to_code = "en"
 
 
 def main():
@@ -26,18 +32,20 @@ def main():
             q.put(bytes(indata))
 
     # argos
-    if not os.path.exists("translate-es_en-1_0.argosmodel"):
-        print ("Please download an einglish-spanish translation model from https://www.argosopentech.com/argospm/index/")
-        print ("and unpack as 'translate-es_en-1_0.argosmodel' in the current folder.")
-        sys.exit(2)
-    package.install_from_path('translate-es_en-1_0.argosmodel')
-    installed_languages = translate.get_installed_languages()
-    translation_es_en = installed_languages[1].get_translation(installed_languages[0])
+    package.update_package_index()
+    available_packages = package.get_available_packages()
+    package_to_install = next(
+        filter(
+            lambda x: x.from_code == from_code and x.to_code == to_code, available_packages
+        )
+    )
+    package.install_from_path(package_to_install.download())
 
-    # pyttsx3
-    engine = pyttsx3.init()
-    engine.setProperty('voice', "english-us")
-    engine.setProperty('rate', 150)
+    # TTS
+    device = "cpu"
+    print(TTS().list_models().list_models())
+    tts = TTS(model_name="tts_models/en/ljspeech/tacotron2-DDC_ph")
+    
 
     try:
         if not os.path.exists("model"):
@@ -66,11 +74,11 @@ def main():
                             print('')
                             print('#' * 10, ' Text ', '#' * 10)
                             print('Text: ', result['text'])
-                            translated = translation_es_en.translate(result['text'])
+                            translated = translate(result['text'], from_code, to_code)
                             print('Translation: ', translated)
                             stop_listening = True
-                            engine.say(translated)
-                            engine.runAndWait()
+                            tts.tts_to_file(text=translated, file_path='output.wav')
+                            playsound.playsound('output.wav')
                             stop_listening = False
                     else:
                         partial_result = json.loads(rec.PartialResult())
@@ -78,7 +86,7 @@ def main():
                             print('')
                             print('#' * 10, ' Partial ', '#' * 10)
                             print('Text: ', partial_result['partial'])
-                            print('Translation: ', translation_es_en.translate(partial_result['partial']))
+                            print('Translation: ', translate(partial_result['partial'], from_code, to_code))
 
     except KeyboardInterrupt:
         print('\nDone')

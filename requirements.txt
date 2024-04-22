@@ -1,4 +1,7 @@
-vosk
-argostranslate
-sounddevice
-git+https://github.com/nateshmbhat/pyttsx3@5d3755b#egg=pyttsx3
+setuptools
+wheel
+vosk==0.3.45
+argostranslate==1.9.3
+sounddevice==0.4.6
+TTS==0.22.0
+playsound==1.3.0

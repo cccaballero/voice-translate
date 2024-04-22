@@ -161,3 +161,5 @@ cython_debug/
 
 /model
 /translate-es_en-1_0.argosmodel
+/output.mp3
+/output.wav
