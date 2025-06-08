@@ -38,8 +38,8 @@ def main():
 
     try:
         if not os.path.exists("model"):
-            print ("Please download a model for your language from https://alphacephei.com/vosk/models")
-            print ("and unpack as 'model' in the current folder.")
+            print("Please download a model for your language from https://alphacephei.com/vosk/models")
+            print("and unpack as 'model' in the current folder.")
             sys.exit(2)
 
         device_info = sd.query_devices(None, 'input')
