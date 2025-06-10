@@ -40,7 +40,6 @@ def main():
             print("and unpack as 'model' in the current folder.")
             sys.exit(2)
 
-
         # Get information about the default audio input device
         device_info = sd.query_devices(None, 'input')
         # Get the sample rate from the device (converting from float to int)
@@ -57,35 +56,33 @@ def main():
                              channels=1,      # Mono audio
                              callback=callback):  # Function to call for each audio block
                 
-                print('#' * 80)
-                print('Press Ctrl+C to stop the recording')
-                print('#' * 80)
+            print('#' * 80)
+            print('Press Ctrl+C to stop the recording')
+            print('#' * 80)
 
+            # Create a Kaldi speech recognizer
+            rec = vosk.KaldiRecognizer(model, samplerate)
 
-                # Create a Kaldi speech recognizer
-                rec = vosk.KaldiRecognizer(model, samplerate)
-                
-                # Main processing loop
-                while True:
-                    # Get the next audio block from the queue
-                    data = q.get()
-                    
-                    # Process the audio with Vosk
-                    if rec.AcceptWaveform(data):
-                        # If we have a final recognition result
-                        result = json.loads(rec.Result())
-                        if result['text']:  # If there's recognized text
-                            print('')
-                            print(f'{"#" * 10} Text {"#" * 10}')
-                            print('Text: ', result['text'])
-                    else:
-                        # Get partial recognition results (while still speaking)
-                        partial_result = json.loads(rec.PartialResult())
-                        if partial_result['partial']:  # If there's partial text
-                            print('')
-                            print(f'{"#" * 10} Partial {"#" * 10}')
-                            print('Text: ', partial_result['partial'])
+            # Main processing loop
+            while True:
+                # Get the next audio block from the queue
+                data = q.get()
 
+                # Process the audio with Vosk
+                if rec.AcceptWaveform(data):
+                    # If we have a final recognition result
+                    result = json.loads(rec.Result())
+                    if result['text']:  # If there's recognized text
+                        print('')
+                        print(f'{"#" * 10} Text {"#" * 10}')
+                        print('Text: ', result['text'])
+                else:
+                    # Get partial recognition results (while still speaking)
+                    partial_result = json.loads(rec.PartialResult())
+                    if partial_result['partial']:  # If there's partial text
+                        print('')
+                        print(f'{"#" * 10} Partial {"#" * 10}')
+                        print('Text: ', partial_result['partial'])
 
     except KeyboardInterrupt:
         # Handle Ctrl+C gracefully

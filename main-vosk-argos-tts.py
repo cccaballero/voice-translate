@@ -93,59 +93,59 @@ def main():
                              channels=1,      # Mono audio
                              callback=callback):  # Function to call for each audio block
                 
-                print('#' * 80)
-                print('Press Ctrl+C to stop the recording')
-                print('Speak in Spanish to hear the English translation')
-                print('#' * 80)
+            print('#' * 80)
+            print('Press Ctrl+C to stop the recording')
+            print('Speak in Spanish to hear the English translation')
+            print('#' * 80)
 
-                # Create a Kaldi speech recognizer
-                rec = vosk.KaldiRecognizer(model, samplerate)
-                
-                # Main processing loop
-                while True:
-                    # Get the next audio block from the queue
-                    data = q.get()
-                    
-                    # Process the audio with Vosk
-                    if rec.AcceptWaveform(data):
-                        # If we have a final recognition result
-                        result = json.loads(rec.Result())
-                        if result['text']:  # If there's recognized text
-                            print('')
-                            print(f'{"#" * 10} Recognized Text (Spanish) {"#" * 10}')
-                            print('Spanish: ', result['text'])
-                            # Translate the recognized text using Argos Translate
-                            translated = translate(result['text'], from_code, to_code)
-                            print(f'{"#" * 10} Translation (English) {"#" * 10}')
-                            print('English: ', translated)
-                            
-                            # Pause listening to avoid recording the TTS output
-                            stop_listening = True
-                            
-                            try:
-                                # Convert the translated text to speech
-                                print("Generating speech...")
-                                tts.tts_to_file(text=translated, file_path='output.wav')
-                                
-                                # Play the generated speech
-                                print("Playing translation...")
-                                playsound.playsound('output.wav')
-                            except Exception as e:
-                                print(f"Error in TTS: {e}")
-                            finally:
-                                # Resume listening
-                                stop_listening = False
-                                print("\nReady to listen again...")
-                                
-                    else:
-                        # Get partial recognition results (while still speaking)
-                        partial_result = json.loads(rec.PartialResult())
-                        if partial_result['partial']:  # If there's partial text
-                            print('')
-                            print(f'{"#" * 10} Partial Recognition {"#" * 10}')
-                            print('Spanish (partial): ', partial_result['partial'])
-                            # Translate the partial text as well (for real-time feedback)
-                            print('English (partial): ', translate(partial_result['partial'], from_code, to_code))
+            # Create a Kaldi speech recognizer
+            rec = vosk.KaldiRecognizer(model, samplerate)
+
+            # Main processing loop
+            while True:
+                # Get the next audio block from the queue
+                data = q.get()
+
+                # Process the audio with Vosk
+                if rec.AcceptWaveform(data):
+                    # If we have a final recognition result
+                    result = json.loads(rec.Result())
+                    if result['text']:  # If there's recognized text
+                        print('')
+                        print(f'{"#" * 10} Recognized Text (Spanish) {"#" * 10}')
+                        print('Spanish: ', result['text'])
+                        # Translate the recognized text using Argos Translate
+                        translated = translate(result['text'], from_code, to_code)
+                        print(f'{"#" * 10} Translation (English) {"#" * 10}')
+                        print('English: ', translated)
+
+                        # Pause listening to avoid recording the TTS output
+                        stop_listening = True
+
+                        try:
+                            # Convert the translated text to speech
+                            print("Generating speech...")
+                            tts.tts_to_file(text=translated, file_path='output.wav')
+
+                            # Play the generated speech
+                            print("Playing translation...")
+                            playsound.playsound('output.wav')
+                        except Exception as e:
+                            print(f"Error in TTS: {e}")
+                        finally:
+                            # Resume listening
+                            stop_listening = False
+                            print("\nReady to listen again...")
+
+                else:
+                    # Get partial recognition results (while still speaking)
+                    partial_result = json.loads(rec.PartialResult())
+                    if partial_result['partial']:  # If there's partial text
+                        print('')
+                        print(f'{"#" * 10} Partial Recognition {"#" * 10}')
+                        print('Spanish (partial): ', partial_result['partial'])
+                        # Translate the partial text as well (for real-time feedback)
+                        print('English (partial): ', translate(partial_result['partial'], from_code, to_code))
 
     except KeyboardInterrupt:
         # Handle Ctrl+C gracefully
