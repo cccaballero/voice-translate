@@ -53,7 +53,7 @@ It serves as a reference implementation for building voice translation applicati
    uv venv
 
    # Install all dependencies from pyproject.toml
-   uv sync
+   uv sync # On MacOS: uv sync --extra macos
    
    # Activate the virtual environment
    source .venv/bin/activate  # On Windows: .venv\Scripts\activate

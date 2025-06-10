@@ -7,9 +7,10 @@ requires-python = ">=3.11"
 dependencies = [
     "argostranslate>=1.9.6",
     "playsound==1.2.2",
-    "pyobjc>=11.0",
-    "pyobjc>=11.0 ; sys_platform == 'darwin'",
     "sounddevice>=0.5.2",
     "tts>=0.22.0",
     "vosk==0.3.44",
 ]
+
+[project.optional-dependencies]
+macos = ["pyobjc>=11.0"]
