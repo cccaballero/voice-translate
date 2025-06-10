@@ -1,7 +1,7 @@
 [project]
 name = "voice-translate"
 version = "0.1.0"
-description = "Add your description here"
+description = "Example voice translation using Vosk and Argos Translate"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
