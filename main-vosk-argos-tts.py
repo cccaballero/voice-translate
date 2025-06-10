@@ -63,9 +63,8 @@ def main():
     package.install_from_path(package_to_install.download())
     print("Translation model ready!")
 
-    # Initialize the Text-to-Speech engine
     print("Initializing Text-to-Speech...")
-    # Using a pre-trained Tacotron2 model for English speech synthesis
+    # Initialize the Text-to-Speech engine using a pre-trained Tacotron2 model for English speech synthesis
     tts = TTS(model_name="tts_models/en/ljspeech/tacotron2-DDC_ph")
     print("TTS engine ready!")
     
