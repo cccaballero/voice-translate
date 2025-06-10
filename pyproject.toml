@@ -14,3 +14,4 @@ dependencies = [
 
 [project.optional-dependencies]
 macos = ["pyobjc>=11.0"]
+gobject = ["pycairo", "PyGObject"]
