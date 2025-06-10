@@ -41,8 +41,6 @@ def main():
     package.install_from_path(package_to_install.download())
 
     # TTS
-    device = "cpu"
-    print(TTS().list_models().list_models())
     tts = TTS(model_name="tts_models/en/ljspeech/tacotron2-DDC_ph")
     
 
