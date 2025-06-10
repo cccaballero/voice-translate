@@ -101,18 +101,18 @@ def main():
                         result = json.loads(rec.Result())
                         if result['text']:  # If there's recognized text
                             print('')
-                            print('#' * 10, ' Recognized Text (Spanish) ', '#' * 10)
+                            print(f'{"#" * 10} Recognized Text (Spanish) {"#" * 10}')
                             print('Spanish: ', result['text'])
                             # Translate the recognized text using Argos Translate
                             translated = translate(result['text'], from_code, to_code)
-                            print('#' * 10, ' Translation (English) ', '#' * 10)
+                            print(f'{"#" * 10} Translation (English) {"#" * 10}')
                             print('English: ', translated)
                     else:
                         # Get partial recognition results (while still speaking)
                         partial_result = json.loads(rec.PartialResult())
                         if partial_result['partial']:  # If there's partial text
                             print('')
-                            print('#' * 10, ' Partial Recognition ', '#' * 10)
+                            print(f'{"#" * 10} Partial Recognition {"#" * 10}')
                             print('Spanish (partial): ', partial_result['partial'])
                             # Translate the partial text as well (for real-time feedback)
                             print('English (partial): ', translate(partial_result['partial'], from_code, to_code))

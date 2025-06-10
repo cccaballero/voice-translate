@@ -76,14 +76,14 @@ def main():
                         result = json.loads(rec.Result())
                         if result['text']:  # If there's recognized text
                             print('')
-                            print('#' * 10, ' Text ', '#' * 10)
+                            print(f'{"#" * 10} Text {"#" * 10}')
                             print('Text: ', result['text'])
                     else:
                         # Get partial recognition results (while still speaking)
                         partial_result = json.loads(rec.PartialResult())
                         if partial_result['partial']:  # If there's partial text
                             print('')
-                            print('#' * 10, ' Partial ', '#' * 10)
+                            print(f'{"#" * 10} Partial {"#" * 10}')
                             print('Text: ', partial_result['partial'])
 
 
